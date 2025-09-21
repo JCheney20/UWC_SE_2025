@@ -1,6 +1,4 @@
 import { Button, Text, YStack, Image } from "tamagui";
-import { StatusBar } from "expo-status-bar";
-import { Platform, Modal as RNModal } from "react-native";
 import { useRouter } from "expo-router";
 
 export default function Modal() {

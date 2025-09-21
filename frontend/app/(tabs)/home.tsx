@@ -16,7 +16,7 @@ type Driver = {
 function DriverListItem({ driver }: { driver: Driver }) {
   const router = useRouter();
   return (
-    <Pressable onPress={() => router.push({ pathname: '/ride-confirmed-modal', params: { name: driver.name } })}>
+    <Pressable onPress={() => router.push({ pathname: '/ride-confirmed-modal' })}>
       <XStack
         paddingHorizontal={10}
         paddingVertical={10}
