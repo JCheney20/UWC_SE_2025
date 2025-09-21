@@ -57,7 +57,6 @@ export default function Map({ onRegionChange }: MapProps) {
       userMapMarkerRef.current.setCoordinates(region);
     }
 
-    console.log(region);
     if (onRegionChange) {
       onRegionChange(region);
     }
