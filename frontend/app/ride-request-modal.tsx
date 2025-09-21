@@ -6,7 +6,7 @@ export default function RideRequestModal() {
   const { name } = useLocalSearchParams<{ name: string }>();
 
   const handleAccept = () => {
-    router.replace({ pathname: '/map'});
+    router.replace({ pathname: '/map', params: { type: "driver" } });
   };
 
   const handleDecline = () => {
