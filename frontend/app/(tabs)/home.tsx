@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { LatLng } from 'react-native-maps';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, View, YStack, XStack, H5, ScrollView } from "tamagui";
+import { Text, View, YStack, XStack, H4, ScrollView } from "tamagui";
 import { UserCircle, ArrowRight } from '@tamagui/lucide-icons';
 import MainPageBackground from "@/components/MainPageBackground";
 import Map from "@/components/Map";
+import { Pressable } from "react-native";
+import { useRouter } from "expo-router";
 
 type Driver = {
   name: string;
@@ -12,26 +14,29 @@ type Driver = {
 }
 
 function DriverListItem({ driver }: { driver: Driver }) {
+  const router = useRouter();
   return (
-    <XStack
-      paddingHorizontal={10}
-      paddingVertical={10}
-      borderRadius={10}
-      gap={10}
-      backgroundColor="white"
-      alignItems="center"
-    >
-      <UserCircle size={50} />
-      <Text>{driver.name}</Text>
-    </XStack>
+    <Pressable onPress={() => router.push({ pathname: '/ride-confirmed-modal', params: { name: driver.name } })}>
+      <XStack
+        paddingHorizontal={10}
+        paddingVertical={10}
+        borderRadius={10}
+        gap={10}
+        backgroundColor="white"
+        alignItems="center"
+      >
+        <UserCircle size={50} />
+        <Text>{driver.name}</Text>
+      </XStack>
+    </Pressable>
   );
 }
 
 function fetchNearbyDrivers({ latitude, longitude }: LatLng): Driver[] {
 
   // return drivers with random locations within a 10-mile radius of the current location
-  const randomLat = () => latitude + Math.random() * 10;
-  const randomLong = () => longitude + Math.random() * 10;
+  const randomLat = () => latitude + Math.random() * 0.1 - 0.05;
+  const randomLong = () => longitude + Math.random() * 0.1 - 0.05;
   return [
     { name: "Driver 1", location: { latitude: randomLat(), longitude: randomLong() }, },
     { name: "Driver 2", location: { latitude: randomLat(), longitude: randomLong() } },
@@ -52,7 +57,7 @@ export default function HomePage() {
   return (
     <MainPageBackground>
       <SafeAreaView mode="margin" style={{ flex: 1, paddingHorizontal: 10, gap: 20 }}>
-        <View paddingHorizontal={10} height="30%">
+        <View marginHorizontal={10} height="30%" overflow="hidden" borderRadius={30}>
           <Map
             onRegionChange={(region) => {
               if (drivers.length === 0) setDrivers(fetchNearbyDrivers(region));
@@ -61,10 +66,10 @@ export default function HomePage() {
         </View>
 
         <XStack alignItems="center" gap={5}>
-          <H5 color="white">
+          <H4 color="white">
             Available Drivers
-          </H5>
-          <ArrowRight color="white" />
+          </H4>
+          <ArrowRight color="white" fontWeight={800} />
         </XStack>
         <ScrollView showsVerticalScrollIndicator={false}>
           <YStack gap={10}>

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { Pressable } from "react-native";
+import { useRouter } from "expo-router";
 import { LatLng } from 'react-native-maps';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, View, YStack, XStack, H3, H5, ScrollView, Dialog, Button, Paragraph}  from "tamagui";
-import { UserCircle, ArrowRight, X } from '@tamagui/lucide-icons';
+import { Text, View, YStack, XStack, H3, H5, ScrollView }  from "tamagui";
+import { UserCircle, ArrowRight } from '@tamagui/lucide-icons';
 import MainPageBackground from "@/components/MainPageBackground";
 import Map from "@/components/Map";
 
@@ -12,9 +14,9 @@ type Passenger = {
 }
 
 function PassengerListItem({ passenger }: { passenger: Passenger }) {
+  const router = useRouter();
   return (
-    <Dialog>
-      <Dialog.Trigger asChild>
+    <Pressable onPress={() => router.push({ pathname: '/ride-request-modal', params: { name: passenger.name } })}>
         <XStack
           paddingHorizontal={10}
           paddingVertical={10}
@@ -26,61 +28,15 @@ function PassengerListItem({ passenger }: { passenger: Passenger }) {
           <UserCircle size={50} />
           <Text>{passenger.name}</Text>
         </XStack>
-      </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay
-          key="overlay"
-          backgroundColor="$shadow6"
-          animateOnly={['transform', 'opacity']}
-          animation={[
-            'quicker',
-            {
-              opacity: {
-                overshootClamping: true,
-              },
-            },
-          ]}
-          enterStyle={{ opacity: 0 }}
-          exitStyle={{ opacity: 0 }}
-        />
-        <Dialog.Content
-          bordered
-          paddingVertical="$4"
-          paddingHorizontal="$6"
-          elevate
-          borderRadius="$6"
-          key="content"
-          animateOnly={['transform', 'opacity']}
-          animation={[
-            'quicker',
-            {
-              opacity: {
-                overshootClamping: true,
-              },
-            },
-          ]}
-          enterStyle={{ x: 0, y: 20, opacity: 0 }}
-          exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
-          gap="$4"
-        >
-          <Dialog.Title>Edit profile</Dialog.Title>
-          <Dialog.Description>
-            Make changes to your profile here. Click save when you're done.
-          </Dialog.Description>
-          <Dialog.Close asChild>
-            <Button position="absolute" right="$3" size="$2" circular icon={X} />
-          </Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog>
+    </Pressable>
   );
 }
 
 function fetchNearbyPassengers({ latitude, longitude }: LatLng): Passenger[] {
 
   // return passengers with random locations within a 10-mile radius of the current location
-  const randomLat = () => latitude + Math.random() * 10;
-  const randomLong = () => longitude + Math.random() * 10;
+  const randomLat = () => latitude + Math.random() * 0.1 - 0.05;
+  const randomLong = () => longitude + Math.random() * 0.1 - 0.05;
   return [
     { name: "Passenger 1", location: { latitude: randomLat(), longitude: randomLong() }, },
     { name: "Passenger 2", location: { latitude: randomLat(), longitude: randomLong() } },
@@ -105,7 +61,7 @@ export default function HomePage() {
         <H3 color="white">
         My Rides
         </H3>
-        <View borderRadius={10} paddingHorizontal={10} height="30%">
+        <View marginHorizontal={10} height="30%" overflow="hidden" borderRadius={30}>
           <Map
             onRegionChange={(region) => {
               if (passengers.length === 0) setPassengers(fetchNearbyPassengers(region));
