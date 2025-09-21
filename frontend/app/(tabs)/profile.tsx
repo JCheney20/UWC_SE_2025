@@ -1,14 +1,11 @@
-import { ImageBackground } from "expo-image";
+import MainPageBackground from "@/components/MainPageBackground";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View } from "tamagui";
 
 export default function() {
   return (
 
-    <ImageBackground
-      source={require('../../assets/images/background-gradient.jpg')}
-      style={{ width: "100%", height: "100%" }}
-    >
+    <MainPageBackground>
       <SafeAreaView>
         <View
           flex={1}
@@ -18,6 +15,6 @@ export default function() {
           <Text>Map Screen in Progress...</Text>
         </View>
       </SafeAreaView>
-    </ImageBackground>
+    </MainPageBackground>
   );
 }

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import * as Location from 'expo-location';
-import { ImageBackground } from "expo-image";
 import MapView, { LatLng, MapMarker, Region, Marker } from 'react-native-maps';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View, YStack, XStack, H5, ScrollView } from "tamagui";
 import { UserCircle, ArrowRight } from '@tamagui/lucide-icons';
+import MainPageBackground from "@/components/MainPageBackground";
 
 type Driver = {
   name: string;
@@ -100,10 +100,7 @@ export default function() {
   console.log(region);
 
   return (
-    <ImageBackground
-      source={require('../../assets/images/background-gradient.jpg')}
-      style={{ width: "100%", height: "100%" }}
-    >
+    <MainPageBackground>
       <SafeAreaView mode="margin" style={{ flex: 1, paddingHorizontal: 10, gap: 20 }}>
         <View paddingHorizontal={10} height="30%">
           <MapView
@@ -132,6 +129,6 @@ export default function() {
           </YStack>
         </ScrollView>
       </SafeAreaView>
-    </ImageBackground>
+    </MainPageBackground>
   );
 }
