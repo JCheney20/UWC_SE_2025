@@ -1,10 +1,13 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import Map from "@/components/Map";
 import { YStack, View, H4, Separator, Button } from "tamagui";
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function MapPage() {
-  const { type } = useLocalSearchParams<{ type: "driver" | "rider" }>();
+  const router = useRouter();
+  let { type } = useLocalSearchParams<{ type: "driver" | "rider" }>();
+
+  type = type || "rider";
 
   return (
     <SafeAreaView style={{ display: "flex", height: "100%" }} edges={["top", "bottom"]}>
@@ -32,11 +35,9 @@ export default function MapPage() {
         borderTopWidth={1}
         borderTopColor="gray"
       >
-        <Link href={{ pathname: "/ride-completed-modal", params: { type } }}>
-          <Button theme="green">
-            Drive completed
-          </Button>
-        </Link>
+        <Button theme="green" onPress={() => router.push({ pathname: "/ride-completed-modal", params: { type } })}>
+          Drive completed
+        </Button>
       </YStack>
     </SafeAreaView>
   );

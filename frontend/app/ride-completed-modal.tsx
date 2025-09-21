@@ -1,16 +1,14 @@
 import { Button, Text, YStack, Image } from "tamagui";
-import { StatusBar } from "expo-status-bar";
-import { Platform, Modal as RNModal } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function Modal() {
   const router = useRouter();
   const { type } = useLocalSearchParams<{ type: "driver" | "rider" }>();
   const handleButtonPress = () => {
-    if (type == "driver") {
+    if (type === "driver") {
       router.replace('/driver')
-    } else if (type == "rider"){
-      router.replace('/home') 
+    } else if (type === "rider") {
+      router.replace('/home')
     }
   }
 
