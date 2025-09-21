@@ -51,13 +51,12 @@ export default function Map({ onRegionChange }: MapProps) {
   useEffect(() => {
     if (!region) return;
     if (mapRef.current) {
-      mapRef.current.animateToRegion(region, 500);
+      mapRef.current.animateToRegion(region, 1000);
     }
     if (userMapMarkerRef.current) {
       userMapMarkerRef.current.setCoordinates(region);
     }
 
-    console.log(region);
     if (onRegionChange) {
       onRegionChange(region);
     }
