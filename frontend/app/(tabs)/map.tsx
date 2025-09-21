@@ -1,8 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import Map from "@/components/Map";
 import { YStack, View, H4, Separator, Button } from "tamagui";
-import { Link } from "expo-router";
-import { useLocalSearchParams } from "expo-router/build/hooks";
+import { Link, useLocalSearchParams } from "expo-router";
 
 export default function MapPage() {
   const { type } = useLocalSearchParams<{ type: "driver" | "rider" }>();
