@@ -32,7 +32,7 @@ export default function Modal() {
             Estimated arrival time is 08:10AM
           </Text>
           <Button
-            onPress={() => router.replace('/map')}
+            onPress={() => router.replace({ pathname: '/map', params: { type: "rider" } })}
             theme="black"
             borderRadius="$8"
             width="100%"
