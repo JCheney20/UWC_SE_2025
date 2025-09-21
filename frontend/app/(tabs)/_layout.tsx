@@ -18,7 +18,7 @@ export default function TabsLayout() {
     <Tabs>
       <Tabs.Screen name="home" options={createTabOptions(Home)} />
       <Tabs.Screen name="map" options={createTabOptions(Map)} />
-      <Tabs.Screen name="chat" options={createTabOptions(MessageSquare)} />
+      <Tabs.Screen name="driver" options={createTabOptions(MessageSquare)} />
       <Tabs.Screen name="profile" options={createTabOptions(User)} />
     </Tabs>
   );
