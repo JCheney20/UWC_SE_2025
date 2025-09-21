@@ -62,6 +62,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="ride-confirmed-modal" options={{ headerShown: false, presentation: "transparentModal" }} />
         <Stack.Screen name="ride-request-modal" options={{ headerShown: false, presentation: "transparentModal" }} />
+        <Stack.Screen name="ride-completed-modal" options={{ headerShown: false, presentation: "transparentModal" }} />
       </Stack>
     </TamaguiProvider>
   );

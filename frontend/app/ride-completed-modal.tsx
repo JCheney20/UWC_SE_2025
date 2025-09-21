@@ -7,9 +7,9 @@ export default function Modal() {
   const router = useRouter();
   const { type } = useLocalSearchParams<{ type: "driver" | "rider" }>();
   const handleButtonPress = () => {
-    if ({type} == "driver") {
+    if (type == "driver") {
       router.replace('/driver')
-    } else if ({type} == "rider"){
+    } else if (type == "rider"){
       router.replace('/home') 
     }
   }
