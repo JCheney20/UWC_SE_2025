@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import * as Location from 'expo-location';
-import MapView, { LatLng, MapMarker, Region, Marker } from 'react-native-maps';
+import { useState } from "react";
+import { LatLng } from 'react-native-maps';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View, YStack, XStack, H5, ScrollView } from "tamagui";
 import { UserCircle, ArrowRight } from '@tamagui/lucide-icons';
