@@ -41,6 +41,9 @@ function fetchNearbyDrivers({ latitude, longitude }: LatLng): Driver[] {
     { name: "Driver 5", location: { latitude: randomLat(), longitude: randomLong() } },
     { name: "Driver 6", location: { latitude: randomLat(), longitude: randomLong() } },
     { name: "Driver 7", location: { latitude: randomLat(), longitude: randomLong() } },
+    { name: "Driver 8", location: { latitude: randomLat(), longitude: randomLong() } },
+    { name: "Driver 9", location: { latitude: randomLat(), longitude: randomLong() } },
+    { name: "Driver 10", location: { latitude: randomLat(), longitude: randomLong() } },
   ];
 }
 
@@ -102,36 +105,32 @@ export default function() {
       source={require('../../assets/images/background-gradient.jpg')}
       style={{ width: "100%", height: "100%" }}
     >
-      <SafeAreaView>
-        <View paddingHorizontal={10}>
-          <YStack gap={20}>
-            <View height="35%" paddingHorizontal={10}>
-              <MapView
-                ref={mapRef}
-                style={{ width: "100%", height: "100%" }}
-                scrollEnabled={false}
-                region={region} >
-                {userMarkerLatLng &&
-                  <Marker
-                    ref={userMapMarkerRef}
-                    coordinate={userMarkerLatLng}
-                    title="Current Location"
-                    description="You are here"
-                  />
-                }
-              </MapView>
-            </View>
-
-            <H5 color="white" verticalAlign="middle">
-              Available Drivers <ArrowRight color="white" />
-            </H5>
-            <ScrollView>
-              <YStack gap={10}>
-                {drivers.map((driver) => <DriverListItem driver={driver} key={driver.name} />)}
-              </YStack>
-            </ScrollView>
-          </YStack>
+      <SafeAreaView mode="margin" style={{ flex: 1, paddingHorizontal: 10, gap: 20 }}>
+        <View paddingHorizontal={10} height="30%">
+          <MapView
+            ref={mapRef}
+            style={{ width: "100%", height: "100%" }}
+            scrollEnabled={false}
+            region={region} >
+            {userMarkerLatLng &&
+              <Marker
+                ref={userMapMarkerRef}
+                coordinate={userMarkerLatLng}
+                title="Current Location"
+                description="You are here"
+              />
+            }
+          </MapView>
         </View>
+
+        <H5 color="white">
+          Available Drivers <ArrowRight color="white" />
+        </H5>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <YStack gap={10}>
+            {drivers.map((driver) => <DriverListItem driver={driver} key={driver.name} />)}
+          </YStack>
+        </ScrollView>
       </SafeAreaView>
     </ImageBackground>
   );
