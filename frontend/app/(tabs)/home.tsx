@@ -46,7 +46,7 @@ function fetchNearbyDrivers({ latitude, longitude }: LatLng): Driver[] {
   ];
 }
 
-export default function IndexPage() {
+export default function HomePage() {
   const [drivers, setDrivers] = useState<Driver[]>([]);
 
   return (
