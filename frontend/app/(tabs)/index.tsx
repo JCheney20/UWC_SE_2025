@@ -120,9 +120,12 @@ export default function() {
           </MapView>
         </View>
 
-        <H5 color="white">
-          Available Drivers <ArrowRight color="white" />
-        </H5>
+        <XStack alignItems="center" gap={5}>
+          <H5 color="white">
+            Available Drivers
+          </H5>
+          <ArrowRight color="white" />
+        </XStack>
         <ScrollView showsVerticalScrollIndicator={false}>
           <YStack gap={10}>
             {drivers.map((driver) => <DriverListItem driver={driver} key={driver.name} />)}
