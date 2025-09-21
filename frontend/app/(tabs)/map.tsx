@@ -1,21 +1,11 @@
 import MainPageBackground from "@/components/MainPageBackground";
-import { ImageBackground } from "expo-image";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, View } from "tamagui";
 
-export default function() {
+export default function MapPage() {
   return (
-
     <MainPageBackground>
-      <SafeAreaView>
-        <View
-          flex={1}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Text>Map Screen in Progress...</Text>
-        </View>
+      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       </SafeAreaView>
-    </MainPageBackground>
+    </MainPageBackground >
   );
 }
