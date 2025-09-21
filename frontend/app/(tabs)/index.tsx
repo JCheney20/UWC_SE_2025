@@ -110,7 +110,8 @@ export default function() {
             ref={mapRef}
             style={{ width: "100%", height: "100%" }}
             scrollEnabled={false}
-            region={region} >
+            region={region}
+          >
             {userMarkerLatLng &&
               <Marker
                 ref={userMapMarkerRef}
