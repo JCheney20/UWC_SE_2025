@@ -5,6 +5,9 @@ const expoConfig = require('eslint-config-expo/flat');
 module.exports = defineConfig([
   expoConfig,
   {
+    rules: {
+      "indent": ["warn", 2],
+    },
     ignores: ['dist/*'],
   },
 ]);
