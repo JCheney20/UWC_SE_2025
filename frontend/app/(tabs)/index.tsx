@@ -1,11 +1,10 @@
-import { Text, View, YStack, XStack, H5, ScrollView } from "tamagui";
-import { UserCircle, ArrowRight } from '@tamagui/lucide-icons';
 import { useEffect, useRef, useState } from "react";
-import MapView, { LatLng, MapMarker, Region } from 'react-native-maps';
-import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { ImageBackground } from "expo-image";
+import MapView, { LatLng, MapMarker, Region, Marker } from 'react-native-maps';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, View, YStack, XStack, H5, ScrollView } from "tamagui";
+import { UserCircle, ArrowRight } from '@tamagui/lucide-icons';
 
 type Driver = {
   name: string;
