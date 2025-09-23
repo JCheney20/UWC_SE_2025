@@ -4,7 +4,8 @@ This is an [Expo](https://expo.dev) project created with `[create-expo-app](http
 
 ## Technologies
 
-- [React Native] + [Expo](https://expo.dev)
+- [Typescript](https://www.typescriptlang.org/) (Language)
+- [React Native] + [Expo](https://expo.dev) (Framework for building native apps)
 - [Tamagui](https://tamagui.dev) (UI Library)
 - [react-native-maps](https://github.com/react-native-maps/react-native-maps) (Map Library)
 
