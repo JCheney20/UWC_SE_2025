@@ -25,6 +25,7 @@ import {
 import { useEffect } from "react";
 
 export default function RootLayout() {
+  // Load all Poppins fonts
   const [fontsLoaded, fontError] = useFonts({
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -46,12 +47,15 @@ export default function RootLayout() {
     Poppins_900Black_Italic,
   });
 
+
+  // Hide the splash screen until all fonts are loaded
   useEffect(() => {
     if (fontsLoaded || fontError) {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, fontError]);
 
+  // If loading fonts are still in progress or error, return null to prevent the app from mounting
   if (!fontsLoaded && !fontError) {
     return null;
   }
