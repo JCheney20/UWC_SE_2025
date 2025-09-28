@@ -8,12 +8,8 @@ export default function RideRequestModal() {
 
   return (
     <ModalStyling onBackgroundPress={() => router.back()}>
-      <Text fontSize="$6">
-        New Ride Request
-      </Text>
-      <Text>
-        You have a new ride request from {name}.
-      </Text>
+      <Text fontSize="$6"> New Ride Request </Text>
+      <Text> You have a new ride request from {name}. </Text>
       <XStack justifyContent="space-around" gap="$3" marginTop="$3" width="100%">
         <Button
           onPress={() => router.back()}
