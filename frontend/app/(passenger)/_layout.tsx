@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 
-export default function DriverLayout() {
+export default function PassengerLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" />
