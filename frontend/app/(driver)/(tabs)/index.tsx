@@ -4,7 +4,7 @@ import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View, YStack, XStack, H3, H5, ScrollView } from "tamagui";
 import { UserCircle, ArrowRight } from '@tamagui/lucide-icons';
-import MainPageBackground from "@/components/MainPageBackground";
+import GradientBackground from "@/components/GradientBackground";
 import Map from "@/components/Map";
 import { fetchNearbyPassengers } from "@/utils/mock-data";
 import { Passenger } from "@/utils/types";
@@ -37,7 +37,7 @@ export default function HomePage() {
   const [passengers, setPassengers] = useState<Passenger[]>([]);
 
   return (
-    <MainPageBackground>
+    <GradientBackground>
       <SafeAreaView mode="margin" style={{ flex: 1, paddingHorizontal: 10, gap: 20 }}>
         <H3 color="white">
           My Rides
@@ -62,6 +62,6 @@ export default function HomePage() {
           </YStack>
         </ScrollView>
       </SafeAreaView>
-    </MainPageBackground>
+    </GradientBackground>
   );
 }

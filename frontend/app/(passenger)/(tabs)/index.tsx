@@ -4,7 +4,7 @@ import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View, YStack, XStack, H4, ScrollView } from "tamagui";
 import { UserCircle, ArrowRight } from '@tamagui/lucide-icons';
-import MainPageBackground from "@/components/MainPageBackground";
+import GradientBackground from "@/components/GradientBackground";
 import Map from "@/components/Map";
 import { Driver } from "@/utils/types";
 import { fetchNearbyDrivers } from "@/utils/mock-data";
@@ -34,7 +34,7 @@ export default function HomePage() {
   const [drivers, setDrivers] = useState<Driver[]>([]);
 
   return (
-    <MainPageBackground>
+    <GradientBackground>
       <SafeAreaView mode="margin" style={{ flex: 1, paddingHorizontal: 10, gap: 20 }}>
         <View marginHorizontal={10} height="30%" overflow="hidden" borderRadius={30}>
           <Map
@@ -56,6 +56,6 @@ export default function HomePage() {
           </YStack>
         </ScrollView>
       </SafeAreaView>
-    </MainPageBackground>
+    </GradientBackground>
   );
 }

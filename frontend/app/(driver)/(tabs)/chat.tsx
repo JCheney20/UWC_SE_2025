@@ -1,11 +1,11 @@
-import MainPageBackground from "@/components/MainPageBackground";
+import GradientBackground from "@/components/GradientBackground";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ChatPage() {
   return (
-    <MainPageBackground>
+    <GradientBackground>
       <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       </SafeAreaView>
-    </MainPageBackground >
+    </GradientBackground >
   );
 }
