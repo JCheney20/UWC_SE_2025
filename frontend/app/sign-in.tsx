@@ -1,8 +1,37 @@
-import { Text } from "tamagui";
+import GradientBackground from "@/components/GradientBackground";
+import { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Label, Button, Input, H3 } from "tamagui";
+
+const handleLogin = (name: string, password: string) => {
+  console.log("Logging in as", name);
+  console.log("Password is", password);
+}
+
 
 // TODO: Implement sign-in page
 export default function SignInPage() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+
   return (
-    <Text>Sign In Page</Text>
+    <GradientBackground>
+      <SafeAreaView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View
+          width="75%"
+          gap="$3"
+          borderWidth={1}
+          padding="$4"
+          borderRadius="$4"
+          backgroundColor="white"
+        >
+          <H3>Sign In</H3>
+          <Label>Username</Label> <Input width="100%" onChangeText={setUsername} />
+          <Label>Password</Label> <Input width="100%" secureTextEntry={true} onChangeText={setPassword} />
+          <Button theme="black">Login</Button>
+        </View>
+      </SafeAreaView>
+    </GradientBackground>
   )
 }

@@ -59,7 +59,7 @@ export default function RootLayout() {
     return null;
   }
 
-  const isLoggedIn = true; // TODO: Implement user authentication
+  const isLoggedIn = false; // TODO: Implement user authentication
   const userType: string = "driver"; // TODO: Implement user authentication
 
   return (
@@ -78,7 +78,6 @@ export default function RootLayout() {
           <Stack.Screen name="(modals)" options={{ presentation: "transparentModal" }} />
         </Stack.Protected>
 
-        { /* Only render the passenger screens if the user is logged in and is a passenger */}
         <Stack.Protected guard={isLoggedIn && userType === "passenger"}>
           <Stack.Screen name="(passenger)" />
         </Stack.Protected>
