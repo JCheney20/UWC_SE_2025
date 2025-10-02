@@ -3,10 +3,6 @@ import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Label, Button, Input, H3 } from "tamagui";
 
-const handleLogin = (name: string, password: string) => {
-  console.log("Logging in as", name);
-  console.log("Password is", password);
-}
 
 
 // TODO: Implement sign-in page
@@ -14,6 +10,10 @@ export default function SignInPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleLogin = () => {
+    console.log("Logging in as", username);
+    console.log("Password is", password);
+  }
 
   return (
     <GradientBackground>
@@ -29,7 +29,7 @@ export default function SignInPage() {
           <H3>Sign In</H3>
           <Label>Username</Label> <Input width="100%" onChangeText={setUsername} />
           <Label>Password</Label> <Input width="100%" secureTextEntry={true} onChangeText={setPassword} />
-          <Button theme="black">Login</Button>
+          <Button theme="black" onPress={handleLogin}>Login</Button>
         </View>
       </SafeAreaView>
     </GradientBackground>
