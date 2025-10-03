@@ -27,8 +27,10 @@ export default function SignInPage() {
           backgroundColor="white"
         >
           <H3>Sign In</H3>
-          <Label>Username</Label> <Input width="100%" onChangeText={setUsername} />
-          <Label>Password</Label> <Input width="100%" secureTextEntry={true} onChangeText={setPassword} />
+          <Label>Username</Label>
+          <Input width="100%" onChangeText={setUsername} />
+          <Label>Password</Label>
+          <Input width="100%" secureTextEntry={true} onChangeText={setPassword} />
           <Button theme="black" onPress={handleLogin}>Login</Button>
         </View>
       </SafeAreaView>
