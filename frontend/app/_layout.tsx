@@ -5,10 +5,10 @@ import { useFonts } from 'expo-font';
 import { useEffect } from "react";
 
 export default function RootLayout() {
-  // Load all Poppins fonts
-  const [fontsLoaded, fontError] = useFonts(poppinFontImports);
 
-  // Hide the splash screen when fonts are loaded
+
+  // Load poppins font and hide the splash screen while the fonts are loading
+  const [fontsLoaded, fontError] = useFonts(poppinFontImports);
   useEffect(() => {
     if (fontsLoaded || fontError) {
       SplashScreen.hideAsync();
@@ -29,16 +29,15 @@ export default function RootLayout() {
 
         {/* Only render the sign-in and register screens if the user is not logged in */}
         <Stack.Protected guard={!isLoggedIn}>
-          <Stack.Screen name="sign-in" />
-          <Stack.Screen name="register" />
+          <Stack.Screen name="(auth)" />
         </Stack.Protected>
 
         { /* Only render the driver screens if the user is logged in and is a driver */}
         <Stack.Protected guard={isLoggedIn && userType === "driver"}>
           <Stack.Screen name="(driver)" />
-          <Stack.Screen name="(modals)" options={{ presentation: "transparentModal" }} />
         </Stack.Protected>
 
+        { /* Only render the passenger screens if the user is logged in and is a passenger */}
         <Stack.Protected guard={isLoggedIn && userType === "passenger"}>
           <Stack.Screen name="(passenger)" />
         </Stack.Protected>
