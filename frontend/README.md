@@ -1,17 +1,17 @@
 # UniRide
 
-This is an [Expo](https://expo.dev) project created with `[create-expo-app](https://www.npmjs.com/package/create-expo-app).`
+UniRide is a mobile application that allows users to plan and book their own rides.
 
-## Technologies Involved
+## Technologies
 
-- [React Native] + [Expo](https://expo.dev)
+- [React Native] / [Expo](https://expo.dev)
 - [Expo Router](https://docs.expo.dev/versions/latest/routing/introduction/) (Routing Library)
 - [Tamagui](https://tamagui.dev) (UI Library)
-- [react-native-maps](https://github.com/react-native-maps/react-native-maps) (Map Library)
+- [Firebase](https://firebase.google.com/) (Backend as a Service)
 
-## Get started
+## Installation
 
-The package manager used is [pnpm](https://pnpm.io/). I'd recommend using it for the project but you can use any package manager you want.
+The package manager used is [pnpm](https://pnpm.io/). I'd [recommend using it](https://refine.dev/blog/pnpm-vs-npm-and-yarn/#improved-speed) for the project (and any other projects) but you can use any package manager you want.
 
 1. Install dependencies with your favourite package manager
 
@@ -19,22 +19,42 @@ The package manager used is [pnpm](https://pnpm.io/). I'd recommend using it for
    pnpm install
    ```
 
-2. Start the app
+2. Login to your Firebase account
 
    ```bash
-   pnpx expo start
+   pnpx firebase login
    ```
 
-In the output, you'll find options to open the app in a
+3. Optional, if you are not invited to the firebase project, you can create your own firebase project and add it to the `default` value in `.firebaserc`
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Running the application
 
-Would recommend using [Expo Go](https://expo.dev/go) for development. It's just easier to setup and use rather than emulators.
+1. Start the [firebase emulator suite](https://firebase.google.com/docs/emulator-suite). If you have trouble connecting later, ensure that ports 9099, 8080, and 9199 are open.
+
+   ```bash
+   pnpx firebase emulators:start
+   ```
+
+2. Copy the `.env.local.example` file to `.env.local`
+
+3. Depending on how you wish to run the application, fill the `EXPO_PUBLIC_FIREBASE_EMULATOR_HOST` in the `.env.local` with:
+   - ios emulator: `localhost`
+   - android emulator: `10.0.2.2`
+   - Expo Go: your computer's IP address on the network your phone is connected to. (On Windows, you can find this by running `ipconfig` in the command prompt.)
+
+4. Start the mobile application. If you are using Expo Go, you can run the application on your phone by scanning the QR code on the screen.
+
+   ```bash
+   pnpm start
+   ```
+
+## Further Reading
+
+In the `/docs` folder you'll find documentation to help you get started with the project technologies.
 
 ## Additional Resources
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- [Firebase documentation](https://firebase.google.com/docs/): Learn more about Firebase products that you can use in your apps.
+- [Firebase CLI](https://firebase.google.com/docs/cli): Command-line tools for Firebase.
