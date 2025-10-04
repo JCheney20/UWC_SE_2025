@@ -10,6 +10,7 @@ import { fetchNearbyPassengers } from "@/utils/mock-data";
 import { Passenger } from "@/utils/types";
 
 
+// The Item component for the passenger list
 function PassengerListItem({ passenger }: { passenger: Passenger }) {
   return (
     <Link

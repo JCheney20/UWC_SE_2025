@@ -19,6 +19,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+// Connect to emulators if in development
 if (__DEV__) {
   const host = "192.168.18.215";
   connectAuthEmulator(auth, `http://${host}:9099`);

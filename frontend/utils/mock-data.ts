@@ -1,9 +1,9 @@
 import { LatLng } from "react-native-maps";
 import { Passenger, Driver } from "./types";
 
+// return passengers with random locations within around the current location
 export function fetchNearbyPassengers({ latitude, longitude }: LatLng): Passenger[] {
 
-  // return passengers with random locations within a 10-mile radius of the current location
   const randomLat = () => latitude + Math.random() * 0.1 - 0.05;
   const randomLong = () => longitude + Math.random() * 0.1 - 0.05;
   return [
@@ -20,9 +20,9 @@ export function fetchNearbyPassengers({ latitude, longitude }: LatLng): Passenge
   ];
 }
 
+// return drivers with random locations within around the current location
 export function fetchNearbyDrivers({ latitude, longitude }: LatLng): Driver[] {
 
-  // return drivers with random locations within a 10-mile radius of the current location
   const randomLat = () => latitude + Math.random() * 0.1 - 0.05;
   const randomLong = () => longitude + Math.random() * 0.1 - 0.05;
   return [
