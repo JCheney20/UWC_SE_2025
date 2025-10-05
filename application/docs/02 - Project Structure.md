@@ -1,6 +1,6 @@
 # Project Structure
 
-This document outlines the structure of the UniRide application project (as of 2025-10-04).
+This document outlines the structure of the UniRide application project (as of 2025-10-05).
 
 ## Root Directory
 
@@ -17,21 +17,17 @@ The root directory contains configuration files for the project, as well as the 
 ├── node_modules/
 ├── utils/
 ├── .firebaserc
+├── .env.local.example
 ├── .gitignore
 ├── app.json
-├── database.rules.json
-├── eas.json
 ├── eslint.config.js
 ├── firebase.json
 ├── firestore.indexes.json
 ├── firestore.rules
-├── google-services.json
-├── GoogleService-Info.plist
 ├── package.json
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
 ├── README.md
-├── storage.rules
 └── tsconfig.json
 ```
 

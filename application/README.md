@@ -6,7 +6,7 @@ UniRide is a mobile application that allows users to plan and book their own rid
 
 - [React Native] / [Expo](https://expo.dev)
 - [Expo Router](https://docs.expo.dev/versions/latest/routing/introduction/) (Routing Library)
-- [Tamagui](https://tamagui.dev) (UI Library)
+- [Tamagui](https://tamagui.dev) (UI Toolkit)
 - [Firebase](https://firebase.google.com/) (Backend as a Service)
 
 ## Installation

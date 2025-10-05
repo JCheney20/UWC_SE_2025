@@ -182,14 +182,12 @@ React is a JavaScript library for building user interfaces. It allows you to cre
 
 **Key Concepts:**
 
-*   **Components:** The building blocks of a React application. They are essentially JavaScript functions (or classes, but we'll stick to functions as requested) that return JSX.
+*   **Components:** The building blocks of a React application. They are essentially JavaScript functions that return JSX.
 *   **JSX:** A syntax extension for JavaScript that looks a lot like HTML. It allows you to write UI elements directly within your JavaScript code.
 *   **Props:** (short for properties) are how you pass data from a parent component to a child component. Think of them as function arguments.
 *   **State:** Data that is managed *within* a component and can change over time. When state changes, React re-renders the component.
 
 **Example Component (using TypeScript and Functional Components):**
-
-Let's modify `src/App.tsx`.
 
 ```tsx
 import React, { useState } from "react";
@@ -273,5 +271,5 @@ This is a crucial distinction, especially for a Java developer used to platform-
 *   **React (Web)** builds applications that run *in a browser* and render web technologies (HTML, CSS).
 *   **React Native** builds applications that run *on mobile devices* and render *native UI components* (iOS/Android).
 
-You use the *same React principles* (components, props, state, JSX syntax) for both, but the underlying rendering mechanism and the specific components you use are different. React Native lets you leverage your JavaScript and React knowledge to build truly native mobile experiences, which is a powerful advantage for many developers.
+You use the *same React principles* (components, props, state, JSX syntax) for both, but the underlying rendering mechanism and the specific components you use are different.
 

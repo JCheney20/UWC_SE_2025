@@ -1,6 +1,6 @@
 # Quick Guide to Tamagui
 
-This guide provides a quick overview of [Tamagui], a UI toolkit for React Native.
+This guide provides a quick overview of Tamagui, a UI toolkit for React Native.
 
 ## Core Concepts
 
