@@ -1,6 +1,6 @@
 # Quick Guide to Tamagui
 
-This guide provides a quick overview of Tamagui, a UI toolkit for React Native and web that helps you build beautiful and performant applications with a consistent design system.
+This guide provides a quick overview of [Tamagui], a UI toolkit for React Native.
 
 ## Core Concepts
 

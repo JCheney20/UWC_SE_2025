@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import MapView, { LatLng, MapMarker, Marker, Region } from "react-native-maps";
 import * as Location from 'expo-location';
 
-type MapProps = {
-  onRegionChange?: (region: Region) => void;
-};
+type MapProps = { onRegionChange?: (region: Region) => void; };
 
+/*
+ * This component is used to display a map with a user's current location.
+ * It uses the react-native-maps library to display the map and the user's location.
+ */
 export default function Map({ onRegionChange }: MapProps) {
   const [region, setRegion] = useState<Region>();
   const [userMarkerLatLng, setUserMarkerLatLng] = useState<LatLng>();

@@ -10,7 +10,7 @@ For example:
 
 *   `app/hello-world.tsx` maps to the `/hello-world` route.
 
-### Index Routes
+## Index Routes
 
 Files named `index.tsx` are treated as the default route for a directory.
 

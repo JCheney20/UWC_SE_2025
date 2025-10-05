@@ -1,6 +1,6 @@
 # Project Structure
 
-This document outlines the structure of the UniRide frontend project (as of 2025-10-04).
+This document outlines the structure of the UniRide application project (as of 2025-10-04).
 
 ## Root Directory
 

@@ -50,11 +50,14 @@ The package manager used is [pnpm](https://pnpm.io/). I'd [recommend using it](h
 
 ## Further Reading
 
-In the `/docs` folder you'll find documentation to help you get started with the project technologies.
+In the `/docs` folder you'll find documentation to help you get started with the project and its libraries.
+Note for this project, if it is too much of a hassle to learn or strapped for time, you can just use the original way of styling.
 
 ## Additional Resources
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- [Expo Router](https://docs.expo.dev/versions/latest/routing/introduction/): Learn how to use routing in your Expo app.
+- [Tamagui Components](https://tamagui.dev/components/): Tamagui is a library of UI components.
 - [Firebase documentation](https://firebase.google.com/docs/): Learn more about Firebase products that you can use in your apps.
 - [Firebase CLI](https://firebase.google.com/docs/cli): Command-line tools for Firebase.
