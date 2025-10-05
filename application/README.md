@@ -54,6 +54,8 @@ In the `/docs` folder you'll find documentation to help you get jump started wit
 
 Note for this project, if it is too much of a hassle to learn or strapped for time, you can just use the original way of styling.
 
+Furthermore, you can use AI coding assistants like [gemini-cli](https://github.com/google-gemini/gemini-cli) or [opencode](https://opencode.ai/) and to help gain a better understanding of the project.
+
 ## Additional Resources
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
