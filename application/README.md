@@ -35,7 +35,7 @@ The package manager used is [pnpm](https://pnpm.io/). I'd [recommend using it](h
    pnpx firebase emulators:start
    ```
 
-2. Copy the `.env.local.example` file to `.env.local`
+2. Duplicate the `.env.local.example` file and rename it `.env.local`
 
 3. Depending on how you wish to run the application, fill the `EXPO_PUBLIC_FIREBASE_EMULATOR_HOST` in the `.env.local` with:
    - ios emulator: `localhost`
@@ -50,7 +50,8 @@ The package manager used is [pnpm](https://pnpm.io/). I'd [recommend using it](h
 
 ## Further Reading
 
-In the `/docs` folder you'll find documentation to help you get started with the project and its libraries.
+In the `/docs` folder you'll find documentation to help you get jump started with the project and its libraries.
+
 Note for this project, if it is too much of a hassle to learn or strapped for time, you can just use the original way of styling.
 
 ## Additional Resources
