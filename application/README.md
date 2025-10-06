@@ -22,17 +22,17 @@ The package manager used is [pnpm](https://pnpm.io/). I'd [recommend using it](h
 2. Login to your Firebase account
 
    ```bash
-   pnpx firebase login
+   pnpx firebase-tools login
    ```
 
 3. Optional, if you are not invited to the firebase project, you can create your own firebase project and add it to the `default` value in `.firebaserc`
 
 ## Running the application
 
-1. Start the [firebase emulator suite](https://firebase.google.com/docs/emulator-suite). If you have trouble connecting later, ensure that ports 9099, 8080, and 9199 are open.
+1. Start the [firebase emulator suite](https://firebase.google.com/docs/emulator-suite). If you have trouble connecting later, ensure that ports 9099, 8080, and 9199 are open. You may be requested to install the firebase emulators.
 
    ```bash
-   pnpx firebase emulators:start
+   pnpx firebase-tools emulators:start
    ```
 
 2. Duplicate the `.env.local.example` file and rename it `.env.local`
