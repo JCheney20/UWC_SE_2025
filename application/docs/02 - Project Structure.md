@@ -16,14 +16,10 @@ The root directory contains configuration files for the project, as well as the 
 ├── docs/
 ├── node_modules/
 ├── utils/
-├── .firebaserc
 ├── .env.local.example
 ├── .gitignore
 ├── app.json
 ├── eslint.config.js
-├── firebase.json
-├── firestore.indexes.json
-├── firestore.rules
 ├── package.json
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
@@ -36,9 +32,6 @@ The root directory contains configuration files for the project, as well as the 
 *   `app.json`: Expo configuration file.
 *   `package.json`: Project dependencies and scripts.
 *   `tsconfig.json`: TypeScript configuration.
-*   `firebase.json`: Firebase configuration.
-*   `google-services.json`: Google services configuration for Android.
-*   `GoogleService-Info.plist`: Google services configuration for iOS.
 
 ## `app` Directory
 
@@ -114,13 +107,11 @@ This directory contains utility functions and helper modules.
 
 ```
 utils/
-├── firebase.ts
 ├── mock-data.ts
 ├── tamagui.ts
 └── types.ts
 ```
 
-*   `firebase.ts`: Firebase configuration and initialization.
 *   `mock-data.ts`: Mock data for testing and development.
 *   `tamagui.ts`: Tamagui configuration.
 *   `types.ts`: TypeScript type definitions.

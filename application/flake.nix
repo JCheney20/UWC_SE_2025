@@ -5,10 +5,10 @@
     let pkgs = nixpkgs.legacyPackages.${system}; in
     {
       devShell = pkgs.mkShell {
-        buildInputs = with pkgs; [ nodejs pnpm firebase-tools ];
+        buildInputs = with pkgs; [ nodejs pnpm ];
         shellHook = ''
           echo "First time running this? Run \"pnpm install\"."
-          echo "Run 'pnpm start' to start the Expo application and firebase emulators."
+          echo "Run 'pnpm start' to start the Expo application."
         '';
       };
     }
