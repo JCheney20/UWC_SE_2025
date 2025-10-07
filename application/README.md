@@ -19,19 +19,43 @@ The package manager used is [pnpm](https://pnpm.io/). I'd [recommend using it](h
    pnpm install
    ```
 
+2. Install the firebase CLI
+
+   ```bash
+   pnpm install -g firebase-tools
+   ```
+
 2. Login to your Firebase account
 
    ```bash
-   pnpx firebase-tools login
+   firebase login
    ```
 
 3. Optional, if you are not invited to the firebase project yet, you can create your own firebase project and add it to the `default` value in `.firebaserc`
 
-4. Start the mobile application. If you are using Expo Go, you can run the application on your phone by scanning the QR code on the screen.
+4. Duplicate the `.env.local.example` file and rename it `.env.local`
+
+5. Depending on how you wish to run the application, fill the `EXPO_PUBLIC_FIREBASE_EMULATOR_HOST` in the `.env.local` with:
+   - ios emulator: `localhost`
+   - android emulator: `10.0.2.2`
+   - Expo Go: your computer's IP address on the network your phone is connected to. (On Windows, you can find this by running `ipconfig` in the command prompt.)
+
+6. Cd into the `firebase` folder, install and start the [firebase emulator suite](https://firebase.google.com/docs/emulator-suite). If you have trouble connecting later, ensure that ports 9099, and 8080 are open. 
+
+   ```bash
+   cd firebase
+   firebase setup:emulators:firestore
+   firebase setup:emulators:ui
+   firebase emulators:start
+   ```
+
+6. Start the mobile application. If you are using Expo Go, you can run the application on your phone by scanning the QR code on the screen.
 
    ```bash
    pnpm start
    ```
+
+7. Visit the firebase emulator UI at `http://localhost:4000`.
 
 ## Further Reading
 
