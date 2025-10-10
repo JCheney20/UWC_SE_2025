@@ -2,47 +2,59 @@ import { Stack, SplashScreen } from "expo-router";
 import { TamaguiProvider } from 'tamagui';
 import { config, poppinFontImports } from '@/utils/tamagui';
 import { useFonts } from 'expo-font';
-import { useEffect } from "react";
+import { createContext, use, useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import useCurrentLocation from "@/hooks/useCurrentLocation";
+import { SupabaseAuthContext, SupabaseAuthProvider } from "@/providers/SupabaseAuthProvider";
+
+const queryClient = new QueryClient()
+export const testContext = createContext(false)
 
 export default function RootLayout() {
-
-
-  // Load poppins font and hide the splash screen while the fonts are loading
+  const location = useCurrentLocation();
   const [fontsLoaded, fontError] = useFonts(poppinFontImports);
+
+  // TODO: Handle font error
+  const finishedLoading = (fontsLoaded || fontError) && (location != null);
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    if (finishedLoading) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [finishedLoading]);
 
   // If font loading is still in progress or errors, return null to prevent the app from mounting
-  if (!fontsLoaded && !fontError) {
+  if (!finishedLoading) {
     return null;
   }
 
-  const isLoggedIn = true; // TODO: Implement user authentication
-  const userType: string = "driver"; // TODO: Implement user authentication
-
   return (
-    <TamaguiProvider config={config}>
-      <Stack screenOptions={{ headerShown: false }}>
-
-        {/* Only render the sign-in and register screens if the user is not logged in */}
-        <Stack.Protected guard={!isLoggedIn}>
-          <Stack.Screen name="(auth)" />
-        </Stack.Protected>
-
-        { /* Only render the driver screens if the user is logged in and is a driver */}
-        <Stack.Protected guard={isLoggedIn && userType === "driver"}>
-          <Stack.Screen name="(driver)" />
-        </Stack.Protected>
-
-        { /* Only render the passenger screens if the user is logged in and is a passenger */}
-        <Stack.Protected guard={isLoggedIn && userType === "passenger"}>
-          <Stack.Screen name="(passenger)" />
-        </Stack.Protected>
-
-      </Stack>
-    </TamaguiProvider>
+    <QueryClientProvider client={queryClient}>
+      <TamaguiProvider config={config}>
+        <SupabaseAuthProvider>
+          <Routing />
+        </SupabaseAuthProvider>
+      </TamaguiProvider>
+    </QueryClientProvider>
   );
+}
+
+function Routing() {
+  const session = use(SupabaseAuthContext);
+  const isLoginedIn = !!session 
+  const isDriver = session?.user?.user_metadata.role === "driver"
+  const isPassenger = session?.user?.user_metadata.role === "passenger"
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Protected guard={!isLoginedIn}>
+        <Stack.Screen name="sign-in" />
+        <Stack.Screen name="register" />
+      </Stack.Protected>
+      <Stack.Protected guard={isDriver}>
+        <Stack.Screen name="(driver)" />
+      </Stack.Protected>
+      <Stack.Protected guard={isPassenger}>
+        <Stack.Screen name="(passenger)" />
+      </Stack.Protected>
+    </Stack>
+  )
 }
