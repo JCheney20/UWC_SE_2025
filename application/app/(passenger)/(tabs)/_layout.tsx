@@ -12,7 +12,6 @@ export default function DriverLayout() {
     <Tabs screenOptions={{ headerShown: false, tabBarShowLabel: false }}>
       <Tabs.Screen name="index" options={createTabBarOptions(Home)} />
       <Tabs.Screen name="map" options={createTabBarOptions(Map)} />
-      <Tabs.Screen name="chat" options={createTabBarOptions(MessageSquare)} />
       <Tabs.Screen name="profile" options={createTabBarOptions(User)} />
     </Tabs>
   );
