@@ -102,9 +102,15 @@ export function useRide() {
   };
 
   const confirmRide = () => {
+    console.log("useRide - confirmRide called.");
+    console.log("useRide - confirmRide: pickup =", pickup);
+    console.log("useRide - confirmRide: selectedDriver =", selectedDriver);
     if (pickup && selectedDriver) {
       setPhase('driver-en-route');
-      startSimulation(selectedDriver.location, pickup);
+      console.log("useRide - confirmRide: phase set to 'driver-en-route'.");
+      // startSimulation(selectedDriver.location, pickup);
+    } else {
+      console.log("useRide - confirmRide: conditions not met (pickup or selectedDriver is null).");
     }
   };
   

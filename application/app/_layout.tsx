@@ -6,6 +6,7 @@ import { createContext, use, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useCurrentLocation from "@/hooks/useCurrentLocation";
 import { SupabaseAuthContext, SupabaseAuthProvider } from "@/providers/SupabaseAuthProvider";
+import ReactModal from 'react-modal';
 
 const queryClient = new QueryClient()
 export const testContext = createContext(false)
@@ -19,6 +20,9 @@ export default function RootLayout() {
   useEffect(() => {
     if (finishedLoading) {
       SplashScreen.hideAsync();
+      if (typeof window !== 'undefined') { // Check if running in a browser environment
+        ReactModal.setAppElement('#root'); // Assuming '#root' is the ID of your app's root element in web
+      }
     }
   }, [finishedLoading]);
 

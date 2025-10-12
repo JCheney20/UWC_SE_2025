@@ -1,5 +1,5 @@
 import { useState, useEffect, use } from "react";
-import { Pressable } from "react-native";
+import { Pressable, Modal } from "react-native";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View, YStack, XStack, H4, ScrollView } from "tamagui";
@@ -17,66 +17,109 @@ import ModalStyling from "@/components/ModalStyling"; // Reusing for confirmatio
 import { Button, Spinner } from "tamagui"; // For modal buttons and loading
 import { SupabaseAuthContext } from "@/providers/SupabaseAuthProvider";
 
-
 // New component for confirming ride
-function ConfirmRideModal({
-  driver,
-  pickup,
-  destination,
-  onConfirm,
-  onCancel,
-  cost
-}: {
+interface ConfirmRideModalProps {
   driver: Driver;
   pickup: Coordinate;
   destination: Coordinate;
-  onConfirm: () => void;
-  onCancel: () => void;
   cost: number;
-}) {
-  return (
-    <ModalStyling onBackgroundPress={onCancel}>
-      <YStack gap="$3" alignItems="center">
-        <Text fontSize="$6">Confirm Ride with {driver.name}?</Text>
-        <Text>From: Your current location</Text>
-        <Text>To: {destination.latitude.toFixed(4)}, {destination.longitude.toFixed(4)}</Text>
-        <Text>Driver: {driver.name} ({driver.distance ? (driver.distance / 1000).toFixed(1) : 'N/A'} km away)</Text>
-        <Text fontSize="$5" fontWeight="bold">Estimated Cost: R{cost.toFixed(2)}</Text>
-        <XStack gap="$3">
-          <Button onPress={onCancel} theme="red" flex={1}>Cancel</Button>
-          <Button onPress={onConfirm} theme="green" flex={1}>Confirm</Button>
-        </XStack>
-      </YStack>
-    </ModalStyling>
-  );
+  onCancel: () => void;
+  onConfirm: () => void;
 }
 
+const ConfirmRideModal = ({ driver, pickup, destination, cost, onCancel, onConfirm }: ConfirmRideModalProps) => {
+  return (
+    <Modal
+      visible={true}
+      transparent={true}
+      animationType="slide"
+      onRequestClose={onCancel}
+    >
+      <YStack
+        flex={1}
+        backgroundColor="rgba(0,0,0,0.5)"
+        justifyContent="center"
+        alignItems="center"
+        padding="$4"
+      >
+        <YStack
+          backgroundColor="$background"
+          padding="$4"
+          borderRadius="$4"
+          gap="$3"
+          width="90%"
+          maxWidth={400}
+        >
+          <Text fontSize="$6" fontWeight="bold">
+            Confirm Ride with {driver.name}?
+          </Text>
+          <Text>From: Your current location</Text>
+          <Text>To: {destination.latitude.toFixed(4)}, {destination.longitude.toFixed(4)}</Text>
+          <Text>Driver: {driver.name} ({driver.distance ? (driver.distance / 1000).toFixed(1) : 'N/A'} km away)</Text>
+          <Text fontSize="$5" fontWeight="bold">Estimated Cost: R{cost.toFixed(2)}</Text>
+
+          <XStack gap="$3" justifyContent="flex-end" marginTop="$3">
+            <Button onPress={onCancel} theme="red" flex={1}>
+              Cancel
+            </Button>
+            <Button onPress={onConfirm} theme="green" flex={1}>
+              Confirm
+            </Button>
+          </XStack>
+        </YStack>
+      </YStack>
+    </Modal>
+  );
+};
+
 // New component for awaiting driver confirmation
-function AwaitingDriverConfirmationModal({ onTimeout }: { onTimeout: () => void }) {
+function AwaitingDriverConfirmationModal({ onTimeout, isVisible }: { onTimeout: () => void; isVisible: boolean }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-      onTimeout(); // Call the callback after 5 seconds
-    }, 5000); // 5 seconds
+    if (isVisible) { // Only start timer if modal is visible
+      const timer = setTimeout(() => {
+        setLoading(false);
+        onTimeout(); // Call the callback after 5 seconds
+      }, 5000); // 5 seconds
 
-    return () => clearTimeout(timer);
-  }, []);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, onTimeout]);
 
   return (
-    <ModalStyling onBackgroundPress={() => {}}> {/* No dismiss on background press */}
-      <YStack gap="$3" alignItems="center">
-        {loading ? (
-          <>
-            <Spinner size="large" color="$blue10" />
-            <Text fontSize="$5">Awaiting driver's confirmation...</Text>
-          </>
-        ) : (
-          <Text fontSize="$5" color="$green10">Driver Confirmed!</Text>
-        )}
+    <Modal
+      visible={isVisible} // Control visibility with prop
+      transparent={true}
+      animationType="slide"
+      onRequestClose={() => {}} // Cannot be dismissed by back button
+    >
+      <YStack
+        flex={1}
+        backgroundColor="rgba(0,0,0,0.5)"
+        justifyContent="center"
+        alignItems="center"
+        padding="$4"
+      >
+        <YStack
+          backgroundColor="$background"
+          padding="$4"
+          borderRadius="$4"
+          gap="$3"
+          width="90%"
+          maxWidth={400}
+        >
+          {loading ? (
+            <>
+              <Spinner size="large" color="$blue10" />
+              <Text fontSize="$5">Awaiting driver's confirmation...</Text>
+            </>
+          ) : (
+            <Text fontSize="$5" color="$green10">Driver Confirmed!</Text>
+          )}
+        </YStack>
       </YStack>
-    </ModalStyling>
+    </Modal>
   );
 }
 
@@ -110,7 +153,7 @@ function DriverListItem({ driver, onSelectDriver }: { driver: Driver; onSelectDr
 
 export default function HomePage() {
   const userLocation = useCurrentLocation();
-  const { setDestination, requestRide, phase, pickup, destination, setPickup } = useRideContext();
+  const { setDestination, requestRide, phase, pickup, destination, setPickup, confirmRide } = useRideContext();
 
   const session = use(SupabaseAuthContext);
   const userName = session?.user?.user_metadata?.full_name || session?.user?.email || 'Guest';
@@ -121,6 +164,8 @@ export default function HomePage() {
   const [driverToConfirm, setDriverToConfirm] = useState<Driver | null>(null);
   const [estimatedCost, setEstimatedCost] = useState(0);
   const [destinationName, setDestinationName] = useState('');
+
+  console.log("HomePage - Current Phase:", phase);
 
   useEffect(() => {
     if (userLocation?.coords) {
@@ -151,17 +196,20 @@ export default function HomePage() {
   };
 
   const handleConfirmRide = () => {
+    console.log("handleConfirmRide called.");
     if (userLocation?.coords && destination && driverToConfirm) {
       requestRide(userLocation.coords, destination, driverToConfirm);
       setIsConfirmModalVisible(false);
-      // Phase will change to 'requesting' in useRide hook
+      console.log("handleConfirmRide - requestRide called, modal hidden.");
+    } else {
+      console.log("handleConfirmRide - conditions not met.");
     }
   };
 
   const handleAwaitingConfirmationTimeout = () => {
-    // This will be called after 5 seconds in AwaitingDriverConfirmationModal
-    // The useRide hook will handle phase transition to 'driver-en-route'
-    // and navigation to map.tsx will be handled by a useEffect in _layout.tsx or map.tsx
+    console.log("handleAwaitingConfirmationTimeout called.");
+    confirmRide(); // Call confirmRide to transition phase and start simulation
+    console.log("handleAwaitingConfirmationTimeout - confirmRide called.");
   };
 
   return (
@@ -175,7 +223,7 @@ export default function HomePage() {
             placeholder="Where to?"
             onLocationSelect={(coords: Coordinate, placeName: string) => {
               setDestination(coords);
-              setDestinationName(placeName);
+              setDestinationName(placeName.split(',')[0]); // Shorten for input display
             }}
             onFocus={() => setActiveInput('destination')}
             onBlur={() => setActiveInput(null)}
