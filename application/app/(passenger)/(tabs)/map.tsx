@@ -6,7 +6,7 @@ import { Image } from "react-native";
 import ModalStyling from "@/components/ModalStyling";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
-import { Marker } from "react-native-maps";
+import { Marker, Polyline } from "react-native-maps";
 
 // Helper functions for formatting (copied from profile.tsx, can be moved to utils if needed)
 const formatDistance = (meters: number): string => {
@@ -139,14 +139,16 @@ export default function MapPage() {
             {/* Driver Marker */}
             {driverLocation && (
               <Marker coordinate={driverLocation} title="Driver" anchor={{ x: 0.5, y: 0.5 }}>
-                <Image
-                  source={require("@/assets/images/Driver_Icon.png")}
+                <View
                   style={{
                     width: getDriverMarkerSize(),
-                    height: getDriverMarkerSize(), // Reverted to square for now
+                    height: getDriverMarkerSize(),
+                    borderRadius: getDriverMarkerSize() / 2,
+                    backgroundColor: 'blue',
+                    borderColor: 'white',
+                    borderWidth: 2,
                     transform: [{ rotate: `${driverBearing}deg` }]
                   }}
-                  resizeMode="contain"
                 />
               </Marker>
             )}

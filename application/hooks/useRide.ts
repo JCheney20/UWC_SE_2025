@@ -108,7 +108,7 @@ export function useRide() {
     if (pickup && selectedDriver) {
       setPhase('driver-en-route');
       console.log("useRide - confirmRide: phase set to 'driver-en-route'.");
-      // startSimulation(selectedDriver.location, pickup);
+      startSimulation(selectedDriver.location, pickup);
     } else {
       console.log("useRide - confirmRide: conditions not met (pickup or selectedDriver is null).");
     }

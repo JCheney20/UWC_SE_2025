@@ -77,13 +77,21 @@ function AwaitingDriverConfirmationModal({ onTimeout, isVisible }: { onTimeout: 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("AwaitingDriverConfirmationModal - useEffect triggered. isVisible:", isVisible);
     if (isVisible) { // Only start timer if modal is visible
+      console.log("AwaitingDriverConfirmationModal - Starting 5-second timer.");
       const timer = setTimeout(() => {
         setLoading(false);
         onTimeout(); // Call the callback after 5 seconds
+        console.log("AwaitingDriverConfirmationModal - Timer finished, onTimeout called.");
       }, 5000); // 5 seconds
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        console.log("AwaitingDriverConfirmationModal - Timer cleared.");
+      };
+    } else {
+      console.log("AwaitingDriverConfirmationModal - isVisible is false, not starting timer.");
     }
   }, [isVisible, onTimeout]);
 
@@ -269,6 +277,9 @@ export default function HomePage() {
       )}
 
       <AwaitingDriverConfirmationModal onTimeout={handleAwaitingConfirmationTimeout} isVisible={phase === 'requesting'}/>
+      {phase === 'requesting' && (
+        <AwaitingDriverConfirmationModal onTimeout={handleAwaitingConfirmationTimeout} isVisible={true} />
+      )}
     </GradientBackground>
   );
 }
