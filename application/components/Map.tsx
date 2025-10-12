@@ -8,13 +8,14 @@ type MapProps = {
   routeCoordinates?: LatLng[];
   startPoint?: Coordinate;
   endPoint?: Coordinate;
+  children?: React.ReactNode;
 };
 
 /*
  * This component is used to display a map with a user's current location.
  * It uses the react-native-maps library to display the map and the user's location.
  */
-export default function Map({ onRegionChange, routeCoordinates, startPoint, endPoint }: MapProps) {
+export default function Map({ onRegionChange, routeCoordinates, startPoint, endPoint, children }: MapProps) {
   const [region, setRegion] = useState<Region>();
   const [userMarkerLatLng, setUserMarkerLatLng] = useState<LatLng>();
   const mapRef = useRef<MapView>(null);
@@ -115,6 +116,7 @@ export default function Map({ onRegionChange, routeCoordinates, startPoint, endP
           strokeWidth={4}
         />
       )}
+      {children}
     </MapView>
   );
 }

@@ -6,6 +6,7 @@ import { Image } from "react-native";
 import ModalStyling from "@/components/ModalStyling";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
+import { Marker } from "react-native-maps";
 
 // Helper functions for formatting (copied from profile.tsx, can be moved to utils if needed)
 const formatDistance = (meters: number): string => {

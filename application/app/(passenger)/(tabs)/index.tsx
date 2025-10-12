@@ -112,7 +112,7 @@ function AwaitingDriverConfirmationModal({ onTimeout, isVisible }: { onTimeout: 
           {loading ? (
             <>
               <Spinner size="large" color="$blue10" />
-              <Text fontSize="$5">Awaiting driver's confirmation...</Text>
+              <Text fontSize="$5">Awaiting drivers confirmation...</Text>
             </>
           ) : (
             <Text fontSize="$5" color="$green10">Driver Confirmed!</Text>
@@ -268,9 +268,7 @@ export default function HomePage() {
         />
       )}
 
-      {phase === 'requesting' && (
-        <AwaitingDriverConfirmationModal onTimeout={handleAwaitingConfirmationTimeout} />
-      )}
+      <AwaitingDriverConfirmationModal onTimeout={handleAwaitingConfirmationTimeout} isVisible={phase === 'requesting'}/>
     </GradientBackground>
   );
 }
