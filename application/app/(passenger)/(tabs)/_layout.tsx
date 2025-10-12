@@ -13,12 +13,8 @@ export default function PassengerLayout() {
   const { phase } = useRideContext();
   const router = useRouter();
 
-  console.log("PassengerLayout - Current Phase:", phase);
-
   useEffect(() => {
-    console.log("PassengerLayout - useEffect triggered, phase:", phase);
     if (phase === 'driver-en-route') {
-      console.log("PassengerLayout - Navigating to map tab.");
       router.replace('/(passenger)/(tabs)/map');
     }
   }, [phase, router]);

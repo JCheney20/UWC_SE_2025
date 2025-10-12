@@ -2,7 +2,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { YStack, View, H4, Separator, Button, Text, XStack } from "tamagui";
 import Map from "@/components/Map";
 import { useRideContext } from "@/providers/RideProvider";
-import ModalStyling from "@/components/ModalStyling";
+import ModalStyling from "@/components/ModalStyling"; // Keep this import for now, might be used by other components
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { Marker, Polyline } from "react-native-maps";
@@ -34,38 +34,6 @@ const getDriverMarkerSize = (currentRegion?: any) => { // currentRegion type is 
 };
 
 
-// New component for "Passenger in car" confirmation
-function PassengerInCarModal({ onConfirm }: { onConfirm: () => void }) {
-  return (
-    <ModalStyling onBackgroundPress={() => {}}> {/* No dismiss on background press */}
-      <YStack gap="$3" alignItems="center">
-        <Text fontSize="$6">Driver has arrived!</Text>
-        <Text>Confirm you are in the car to proceed to your destination.</Text>
-        <Button onPress={onConfirm} theme="green" width="100%">
-          Confirm Pickup
-        </Button>
-      </YStack>
-    </ModalStyling>
-  );
-}
-
-// New component for "Ride Completed"
-function RideCompletedModal({ onDismiss }: { onDismiss: () => void }) {
-  const router = useRouter();
-  return (
-    <ModalStyling onBackgroundPress={onDismiss}>
-      <YStack gap="$3" alignItems="center">
-        <Text fontSize="$6">Ride Completed!</Text>
-        <Text>You have arrived at your destination.</Text>
-        <Button onPress={() => { onDismiss(); router.replace('/(passenger)/(tabs)/index'); }} theme="blue" width="100%">
-          OK
-        </Button>
-      </YStack>
-    </ModalStyling>
-  );
-}
-
-
 export default function MapPage() {
   const {
     phase,
@@ -78,32 +46,23 @@ export default function MapPage() {
     remainingDistance,
     remainingDuration,
     remainingRoute,
-    confirmPickup,
+    confirmPickup, // This is not used in this file anymore, but keeping it for now
   } = useRideContext();
   const router = useRouter();
 
   // Effect to handle navigation away from map if ride is completed
   useEffect(() => {
     if (phase === 'arrived') {
-      // The RideCompletedModal will handle navigation back to index
+      router.replace('/(passenger)/(tabs)/index'); // Navigate back to index when ride is completed
     }
   }, [phase, router]);
 
 
   // Determine which points to show on the map
-  let mapStartPoint = null;
-  let mapEndPoint = null;
-  let mapRouteCoordinates = [];
-
-  if (phase === 'driver-en-route') {
-    mapStartPoint = driverLocation; // Driver's current location
-    mapEndPoint = pickup; // Passenger's pickup location
-    mapRouteCoordinates = remainingRoute;
-  } else if (phase === 'en-route-to-destination') {
-    mapStartPoint = driverLocation; // Passenger's current location (with driver)
-    mapEndPoint = destination; // Final destination
-    mapRouteCoordinates = remainingRoute;
-  }
+  // In this map, we are always en-route to destination
+  let mapStartPoint = driverLocation; // Passenger's current location (with driver)
+  let mapEndPoint = destination; // Final destination
+  let mapRouteCoordinates = remainingRoute;
 
 
   return (
@@ -117,10 +76,7 @@ export default function MapPage() {
           borderBottomColor="gray"
         >
           <H4>
-            {phase === 'driver-en-route' && `Driver en route to ${pickup?.latitude.toFixed(4)}, ${pickup?.longitude.toFixed(4)}`}
-            {phase === 'en-route-to-destination' && `En route to ${destination?.latitude.toFixed(4)}, ${destination?.longitude.toFixed(4)}`}
-            {phase === 'passenger-pickup' && `Driver at pickup location`}
-            {phase === 'arrived' && `Arrived at destination`}
+            En route to {destination?.latitude.toFixed(4)}, {destination?.longitude.toFixed(4)}
           </H4>
           <Separator borderColor="rgba(128,0,128,0.2)" />
           <XStack justifyContent="space-between">
@@ -155,14 +111,6 @@ export default function MapPage() {
             {mapEndPoint && <Marker coordinate={mapEndPoint} title="Destination" pinColor="red" />}
           </Map>
         </View>
-
-        {/* Modals */}
-        {phase === 'passenger-pickup' && (
-          <PassengerInCarModal onConfirm={confirmPickup} />
-        )}
-        {phase === 'arrived' && (
-          <RideCompletedModal onDismiss={() => { /* handle dismiss */ }} />
-        )}
       </YStack>
     </SafeAreaView>
   );

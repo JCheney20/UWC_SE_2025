@@ -77,21 +77,13 @@ function AwaitingDriverConfirmationModal({ onTimeout, isVisible }: { onTimeout: 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("AwaitingDriverConfirmationModal - useEffect triggered. isVisible:", isVisible);
     if (isVisible) { // Only start timer if modal is visible
-      console.log("AwaitingDriverConfirmationModal - Starting 5-second timer.");
       const timer = setTimeout(() => {
         setLoading(false);
         onTimeout(); // Call the callback after 5 seconds
-        console.log("AwaitingDriverConfirmationModal - Timer finished, onTimeout called.");
       }, 5000); // 5 seconds
 
-      return () => {
-        clearTimeout(timer);
-        console.log("AwaitingDriverConfirmationModal - Timer cleared.");
-      };
-    } else {
-      console.log("AwaitingDriverConfirmationModal - isVisible is false, not starting timer.");
+      return () => clearTimeout(timer);
     }
   }, [isVisible, onTimeout]);
 
@@ -120,7 +112,7 @@ function AwaitingDriverConfirmationModal({ onTimeout, isVisible }: { onTimeout: 
           {loading ? (
             <>
               <Spinner size="large" color="$blue10" />
-              <Text fontSize="$5">Awaiting drivers confirmation...</Text>
+              <Text fontSize="$5">Awaiting driver's confirmation...</Text>
             </>
           ) : (
             <Text fontSize="$5" color="$green10">Driver Confirmed!</Text>
@@ -173,8 +165,6 @@ export default function HomePage() {
   const [estimatedCost, setEstimatedCost] = useState(0);
   const [destinationName, setDestinationName] = useState('');
 
-  console.log("HomePage - Current Phase:", phase);
-
   useEffect(() => {
     if (userLocation?.coords) {
       setPickup(userLocation.coords);
@@ -204,20 +194,14 @@ export default function HomePage() {
   };
 
   const handleConfirmRide = () => {
-    console.log("handleConfirmRide called.");
     if (userLocation?.coords && destination && driverToConfirm) {
       requestRide(userLocation.coords, destination, driverToConfirm);
       setIsConfirmModalVisible(false);
-      console.log("handleConfirmRide - requestRide called, modal hidden.");
-    } else {
-      console.log("handleConfirmRide - conditions not met.");
     }
   };
 
   const handleAwaitingConfirmationTimeout = () => {
-    console.log("handleAwaitingConfirmationTimeout called.");
     confirmRide(); // Call confirmRide to transition phase and start simulation
-    console.log("handleAwaitingConfirmationTimeout - confirmRide called.");
   };
 
   return (
@@ -277,9 +261,6 @@ export default function HomePage() {
       )}
 
       <AwaitingDriverConfirmationModal onTimeout={handleAwaitingConfirmationTimeout} isVisible={phase === 'requesting'}/>
-      {phase === 'requesting' && (
-        <AwaitingDriverConfirmationModal onTimeout={handleAwaitingConfirmationTimeout} isVisible={true} />
-      )}
     </GradientBackground>
   );
 }

@@ -1,11 +1,17 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { getRoute, RouteInfo, Coordinate } from '@/utils/route';
 import { getDistance, getBearing } from '@/utils/location';
 import { Driver } from '@/utils/types';
+import { useRouter } from 'expo-router'; // Added import
 
 export type RidePhase = 'idle' | 'requesting' | 'driver-en-route' | 'passenger-pickup' | 'en-route-to-destination' | 'arrived';
 
+const SPEED_MULTIPLIER = 10; // Make the simulation 2 times faster
+
 export function useRide() {
+  // Added router instance
+  const router = useRouter();
+
   // Ride state
   const [phase, setPhase] = useState<RidePhase>('idle');
   const [pickup, setPickup] = useState<Coordinate | null>(null);
@@ -14,29 +20,51 @@ export function useRide() {
   const [route, setRoute] = useState<RouteInfo | null>(null);
 
   // Simulation state
-  const [driverLocation, setDriverLocation] = useState<Coordinate | null>(null);
-  const [driverBearing, setDriverBearing] = useState(0);
-  const [remainingDistance, setRemainingDistance] = useState(0);
-  const [remainingDuration, setRemainingDuration] = useState(0);
-  const [remainingRoute, setRemainingRoute] = useState<Coordinate[]>([]);
+  const [simulationState, setSimulationState] = useState<{
+    driverLocation: Coordinate | null;
+    driverBearing: number;
+    remainingDistance: number;
+    remainingDuration: number;
+    remainingRoute: Coordinate[];
+  }> ({
+    driverLocation: null,
+    driverBearing: 0,
+    remainingDistance: 0,
+    remainingDuration: 0,
+    remainingRoute: [],
+  });
 
   const animationFrameRef = useRef<number>(0);
   const simulationStartTimeRef = useRef<number>(0);
 
-  const animate = (currentRoute: RouteInfo, duration: number) => {
+  // Store phase in a ref to access its latest value inside animate without re-creating animate
+  const phaseRef = useRef(phase);
+  useEffect(() => {
+    phaseRef.current = phase;
+  }, [phase]);
+
+  const driverLocationRef = useRef(simulationState.driverLocation);
+  useEffect(() => {
+    driverLocationRef.current = simulationState.driverLocation;
+  }, [simulationState.driverLocation]);
+
+  const animate = useCallback((currentRoute: RouteInfo, duration: number) => {
     const elapsedTime = (Date.now() - simulationStartTimeRef.current) / 1000;
     const progress = elapsedTime / duration;
 
     if (progress >= 1) {
-      setDriverLocation(currentRoute.coordinates[currentRoute.coordinates.length - 1]);
-      setRemainingRoute([]);
-      setRemainingDistance(0);
-      setRemainingDuration(0);
+      setSimulationState(prev => ({
+        ...prev,
+        driverLocation: currentRoute.coordinates[currentRoute.coordinates.length - 1],
+        remainingRoute: [],
+        remainingDistance: 0,
+        remainingDuration: 0,
+      }));
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-      // Handle arrival
-      if (phase === 'driver-en-route') {
+      // Handle arrival using phaseRef.current
+      if (phaseRef.current === 'driver-en-route') {
         setPhase('passenger-pickup');
-      } else if (phase === 'en-route-to-destination') {
+      } else if (phaseRef.current === 'en-route-to-destination') {
         setPhase('arrived');
       }
       return;
@@ -64,23 +92,28 @@ export function useRide() {
       const interpolatedLat = segment.start.latitude + (segment.end.latitude - segment.start.latitude) * fractionOfSegment;
       const interpolatedLng = segment.start.longitude + (segment.end.longitude - segment.start.longitude) * fractionOfSegment;
       const newDriverLocation = { latitude: interpolatedLat, longitude: interpolatedLng };
-
-      setDriverLocation(newDriverLocation);
-      setDriverBearing(getBearing(segment.start, segment.end));
+      const newDriverBearing = getBearing(segment.start, segment.end);
 
       const newRemainingRoute = [newDriverLocation, ...currentRoute.coordinates.slice(currentSegmentIndex + 1)];
-      setRemainingRoute(newRemainingRoute);
 
       let newRemainingDistance = getDistance(newDriverLocation, segment.end);
       for (let i = currentSegmentIndex + 1; i < currentRoute.coordinates.length - 1; i++) {
         newRemainingDistance += getDistance(currentRoute.coordinates[i], currentRoute.coordinates[i + 1]);
       }
-      setRemainingDistance(newRemainingDistance);
-      setRemainingDuration(duration - elapsedTime);
+      const newRemainingDuration = duration - elapsedTime;
+
+      setSimulationState(prev => ({
+        ...prev,
+        driverLocation: newDriverLocation,
+        driverBearing: newDriverBearing,
+        remainingRoute: newRemainingRoute,
+        remainingDistance: newRemainingDistance,
+        remainingDuration: newRemainingDuration,
+      }));
     }
 
     animationFrameRef.current = requestAnimationFrame(() => animate(currentRoute, duration));
-  };
+  }, [setSimulationState, setPhase, animationFrameRef, simulationStartTimeRef]); // Dependencies for useCallback
 
   const startSimulation = async (start: Coordinate, end: Coordinate) => {
     if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
@@ -88,12 +121,12 @@ export function useRide() {
     const newRoute = await getRoute(start, end, 'driving-traffic');
     if (newRoute && newRoute.coordinates.length > 0) {
       setRoute(newRoute);
-      setDriverLocation(start);
+      setSimulationState(prev => ({ ...prev, driverLocation: start }));
       simulationStartTimeRef.current = Date.now();
-      animate(newRoute, newRoute.duration);
+      animate(newRoute, newRoute.duration / SPEED_MULTIPLIER);
     }
   };
-
+ 
   const requestRide = (pickup: Coordinate, destination: Coordinate, driver: Driver) => {
     setPickup(pickup);
     setDestination(destination);
@@ -102,15 +135,9 @@ export function useRide() {
   };
 
   const confirmRide = () => {
-    console.log("useRide - confirmRide called.");
-    console.log("useRide - confirmRide: pickup =", pickup);
-    console.log("useRide - confirmRide: selectedDriver =", selectedDriver);
     if (pickup && selectedDriver) {
       setPhase('driver-en-route');
-      console.log("useRide - confirmRide: phase set to 'driver-en-route'.");
       startSimulation(selectedDriver.location, pickup);
-    } else {
-      console.log("useRide - confirmRide: conditions not met (pickup or selectedDriver is null).");
     }
   };
   
@@ -118,6 +145,7 @@ export function useRide() {
     if (pickup && destination) {
       setPhase('en-route-to-destination');
       startSimulation(pickup, destination);
+      router.replace('/(passenger)/(tabs)/map-to-destination'); // Added navigation
     }
   };
 
@@ -133,11 +161,11 @@ export function useRide() {
     destination,
     selectedDriver,
     route,
-    driverLocation,
-    driverBearing,
-    remainingDistance,
-    remainingDuration,
-    remainingRoute,
+    driverLocation: simulationState.driverLocation,
+    driverBearing: simulationState.driverBearing,
+    remainingDistance: simulationState.remainingDistance,
+    remainingDuration: simulationState.remainingDuration,
+    remainingRoute: simulationState.remainingRoute,
     requestRide,
     confirmRide,
     confirmPickup,
@@ -145,3 +173,4 @@ export function useRide() {
     setPickup,
   };
 }
+

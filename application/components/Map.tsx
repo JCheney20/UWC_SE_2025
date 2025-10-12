@@ -21,7 +21,23 @@ export default function Map({ onRegionChange, routeCoordinates, startPoint, endP
   const mapRef = useRef<MapView>(null);
   const userMapMarkerRef = useRef<MapMarker>(null);
 
+  // Correct placement for useRef
+  const latestRegion = useRef(region);
+  const latestUserMarkerLatLng = useRef(userMarkerLatLng);
+
+  // Update refs whenever state changes
   useEffect(() => {
+    latestRegion.current = region;
+  }, [region]);
+
+  useEffect(() => {
+    latestUserMarkerLatLng.current = userMarkerLatLng;
+  }, [userMarkerLatLng]);
+
+
+  useEffect(() => { // This is the useEffect for location watching
+    let subscriber: Location.LocationSubscription | null = null;
+
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -30,7 +46,7 @@ export default function Map({ onRegionChange, routeCoordinates, startPoint, endP
         return;
       }
 
-      const subscription = await Location.watchPositionAsync(
+      subscriber = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
           timeInterval: 2000,
@@ -38,22 +54,38 @@ export default function Map({ onRegionChange, routeCoordinates, startPoint, endP
         },
         (loc) => {
           const { latitude, longitude } = loc.coords;
+          const newLatLng = { latitude, longitude };
+
+          // Only update userMarkerLatLng if it has actually changed
+          if (!latestUserMarkerLatLng.current || latestUserMarkerLatLng.current.latitude !== newLatLng.latitude || latestUserMarkerLatLng.current.longitude !== newLatLng.longitude) {
+            setUserMarkerLatLng(newLatLng);
+          }
+
+          const currentRegion = latestRegion.current;
           const newRegion = {
             latitude,
             longitude,
-            latitudeDelta: region?.latitudeDelta || 0.01,
-            longitudeDelta: region?.longitudeDelta || 0.01,
+            latitudeDelta: currentRegion?.latitudeDelta || 0.01,
+            longitudeDelta: currentRegion?.longitudeDelta || 0.01,
           };
-          if(!routeCoordinates) {
+          // Only update region if it has changed significantly and no route is active
+          if(!routeCoordinates && (
+            !currentRegion ||
+            Math.abs(newRegion.latitude - currentRegion.latitude) > 0.0001 ||
+            Math.abs(newRegion.longitude - currentRegion.longitude) > 0.0001
+          )) {
             setRegion(newRegion);
           }
-          setUserMarkerLatLng({ latitude, longitude });
         }
       );
       // Clean up on unmount
-      return () => subscription.remove();
+      return () => {
+        if (subscriber) {
+          subscriber.remove();
+        }
+      };
     })();
-  }, [routeCoordinates]);
+  }, []); // Empty dependency array
 
 
   useEffect(() => {
