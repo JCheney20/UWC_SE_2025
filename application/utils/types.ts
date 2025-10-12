@@ -3,6 +3,8 @@ import { Database } from "./database.types";
 export type Driver = {
     name: string;
     location: { latitude: number; longitude: number };
+    rate: number; // Add rate property
+    distance?: number; // Add optional distance property
 }
 
 export type Passenger = {

@@ -7,7 +7,7 @@ function createTabBarOptions(Icon: typeof Home) {
   };
 }
 
-export default function DriverLayout() {
+export default function PassengerLayout() {
   return (
     <Tabs screenOptions={{ headerShown: false, tabBarShowLabel: false }}>
       <Tabs.Screen name="index" options={createTabBarOptions(Home)} />

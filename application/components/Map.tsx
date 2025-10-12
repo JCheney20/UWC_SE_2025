@@ -1,14 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import MapView, { LatLng, MapMarker, Marker, Region } from "react-native-maps";
+import MapView, { LatLng, MapMarker, Marker, Polyline, Region } from "react-native-maps";
 import * as Location from 'expo-location';
+import { Coordinate } from "@/utils/route";
 
-type MapProps = { onRegionChange?: (region: Region) => void; };
+type MapProps = {
+  onRegionChange?: (region: Region) => void;
+  routeCoordinates?: LatLng[];
+  startPoint?: Coordinate;
+  endPoint?: Coordinate;
+};
 
 /*
  * This component is used to display a map with a user's current location.
  * It uses the react-native-maps library to display the map and the user's location.
  */
-export default function Map({ onRegionChange }: MapProps) {
+export default function Map({ onRegionChange, routeCoordinates, startPoint, endPoint }: MapProps) {
   const [region, setRegion] = useState<Region>();
   const [userMarkerLatLng, setUserMarkerLatLng] = useState<LatLng>();
   const mapRef = useRef<MapView>(null);
@@ -31,23 +37,22 @@ export default function Map({ onRegionChange }: MapProps) {
         },
         (loc) => {
           const { latitude, longitude } = loc.coords;
-          setRegion({
+          const newRegion = {
             latitude,
             longitude,
             latitudeDelta: region?.latitudeDelta || 0.01,
             longitudeDelta: region?.longitudeDelta || 0.01,
-          });
+          };
+          if(!routeCoordinates) {
+            setRegion(newRegion);
+          }
           setUserMarkerLatLng({ latitude, longitude });
-
-          // if (onRegionChange && region) {
-          //   onRegionChange(region);
-          // }
         }
       );
       // Clean up on unmount
       return () => subscription.remove();
     })();
-  }, []);
+  }, [routeCoordinates]);
 
 
   useEffect(() => {
@@ -63,14 +68,37 @@ export default function Map({ onRegionChange }: MapProps) {
       onRegionChange(region);
     }
   }, [region]);
+
+  useEffect(() => {
+    if (routeCoordinates && startPoint && endPoint) {
+      const latitudes = [startPoint.latitude, endPoint.latitude, ...routeCoordinates.map(c => c.latitude)];
+      const longitudes = [startPoint.longitude, endPoint.longitude, ...routeCoordinates.map(c => c.longitude)];
+
+      const minLat = Math.min(...latitudes);
+      const maxLat = Math.max(...latitudes);
+      const minLng = Math.min(...longitudes);
+      const maxLng = Math.max(...longitudes);
+
+      const latDelta = (maxLat - minLat) * 1.5;
+      const lngDelta = (maxLng - minLng) * 1.5;
+
+      const newRegion = {
+        latitude: (minLat + maxLat) / 2,
+        longitude: (minLng + maxLng) / 2,
+        latitudeDelta: Math.max(latDelta, 0.01),
+        longitudeDelta: Math.max(lngDelta, 0.01)
+      };
+      setRegion(newRegion);
+    }
+  }, [routeCoordinates, startPoint, endPoint]);
+
   return (
     <MapView
       ref={mapRef}
       style={{ width: "100%", height: "100%" }}
-      scrollEnabled={false}
       region={region}
     >
-      {userMarkerLatLng &&
+      {userMarkerLatLng && !routeCoordinates &&
         <Marker
           ref={userMapMarkerRef}
           coordinate={userMarkerLatLng}
@@ -78,6 +106,16 @@ export default function Map({ onRegionChange }: MapProps) {
           description="You are here"
         />
       }
+      {startPoint && <Marker coordinate={startPoint} title="Start" pinColor="green" />}
+      {endPoint && <Marker coordinate={endPoint} title="Destination" pinColor="red" />}
+      {routeCoordinates && routeCoordinates.length > 0 && (
+        <Polyline
+          coordinates={routeCoordinates}
+          strokeColor="#007AFF"
+          strokeWidth={4}
+        />
+      )}
     </MapView>
   );
 }
+
